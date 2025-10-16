@@ -6,7 +6,6 @@ import { MyDate } from '@core/validator/myDate';
 import { StatusEnum } from '@core/constants/post.enum';
 import { IsValidFileTrans } from '@src/core/validator/IsValidFileTrans';
 export class BePostDto {
-
    @ApiProperty({
       type: String,
       description: 'title',
@@ -14,6 +13,14 @@ export class BePostDto {
    })
    @IsNotEmpty()
    title: string;
+
+   @ApiProperty({
+      type: String,
+      description: 'slug',
+      required: true,
+   })
+   @IsNotEmpty()
+   slug: string;
 
    @ApiProperty({
       type: String,

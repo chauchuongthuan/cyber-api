@@ -99,6 +99,7 @@ export class TransformerPostService {
       return {
          id: doc.id,
          title: doc.title,
+         slug: doc.slug,
          content: doc.content,
          readTime: doc.readTime,
          author: doc.author,
@@ -119,6 +120,7 @@ export class TransformerPostService {
                      return {
                         id: `${doc._id}`,
                         title: doc.title,
+                        slug: doc.slug,
                         content: JSON.stringify(doc.content),
                         readTime: doc.readTime,
                         author: doc.author,
@@ -127,7 +129,7 @@ export class TransformerPostService {
                      };
                   })
                   : [{}],
-            customHeaders: customHeaders || ['ID', 'Tiêu đề', 'Nội dung', 'Thời gian đọc', 'Tác giả', 'Hình', 'Ngày tạo'],
+            customHeaders: customHeaders || ['ID', 'Tiêu đề', 'Slug', 'Nội dung', 'Thời gian đọc', 'Tác giả', 'Hình', 'Ngày tạo'],
          },
       };
    }

@@ -106,7 +106,7 @@ export class PostService {
 
       if (isNotEmpty(query.get)) {
          const get = parseInt(query.get);
-         const result = this.post.find(conditions).sort(sort).select(projection).populate('category');
+         const result = this.post.find(conditions).sort(sort).select(projection);
          return isNaN(get) ? result : result.limit(get);
       } else {
          return this.post.paginate(conditions, {
@@ -114,7 +114,6 @@ export class PostService {
             page: query.page,
             limit: query.limit,
             sort: sort,
-            populate: ['category'],
          });
       }
    }
@@ -213,9 +212,6 @@ export class PostService {
    }
 
    async create(data: object, files: Record<any, any>): Promise<Post> {
-      const self = this;
-      const tagIds = [];
-      //
       await convertContentFileDto(data, files, ['image']);
 
       const item = await new this.post(data).save();
@@ -224,8 +220,6 @@ export class PostService {
    }
 
    async update(id: string, data: object, files: Record<any, any>): Promise<any> {
-      const self = this;
-      const tagIds = [];
       let item = await this.findById(id);
       if (!item) return false;
       //

@@ -44,11 +44,11 @@ export class Post extends Document {
    })
    image: string;
 
-   @Prop({
-      required: false,
-      default: null,
-   })
-   publishedAt: Date;
+   // @Prop({
+   //    required: false,
+   //    default: null,
+   // })
+   // publishedAt: Date;
 
    @Prop({
       required: true,
