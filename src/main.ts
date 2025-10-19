@@ -78,10 +78,10 @@ class Swagger {
          mainModules.push(...extraModules);
       }
 
-      const siteTitle = title || 'API Turk Hacks';
+      const siteTitle = title || 'API Cyber';
       const options = new DocumentBuilder()
          .setTitle(siteTitle)
-         .setDescription('API Turk Hacks description')
+         .setDescription('API Cyber description')
          .setVersion('1.0')
          .addBearerAuth()
          .build();
