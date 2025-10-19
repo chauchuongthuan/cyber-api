@@ -103,6 +103,7 @@ export class TransformerPostService {
          content: doc.content,
          readTime: doc.readTime,
          author: doc.author,
+         featured: doc.featured,
          image: doc.image ? (typeof doc.thumb === 'function' ? doc.thumb('image') : doc.image) : '',
          createdAt: moment(doc.createdAt).format(DateTime.CREATED_AT),
          ...appendData,

@@ -44,6 +44,11 @@ export class Post extends Document {
    })
    image: string;
 
+   @Prop({
+      default: false,
+   })
+   featured: boolean;
+
    // @Prop({
    //    required: false,
    //    default: null,

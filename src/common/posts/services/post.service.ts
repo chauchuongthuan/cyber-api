@@ -71,7 +71,9 @@ export class PostService {
             $regex: new RegExp(query.title, 'img'),
          };
       }
-
+      if (isNotEmpty(query.featured)) {
+         conditions['featured'] = true;
+      }
       if (isNotEmpty(query.slug)) {
          conditions['slug'] = {
             $regex: new RegExp(query.slug, 'img'),
@@ -203,12 +205,9 @@ export class PostService {
    }
 
    async findBySlug(slug: string): Promise<Post> {
-      const locale = this.request.locale;
       const conditions = {};
-      conditions[`slug.${locale}`] = slug;
-      conditions[`active`] = true;
-      conditions['publishedAt'] = { $lte: moment().format('DD-MM-YYYY HH:mm:ss') };
-      return await this.post.findOne(conditions).populate('postCategory');
+      conditions[`slug`] = slug;
+      return await this.post.findOne(conditions);
    }
 
    async create(data: object, files: Record<any, any>): Promise<Post> {

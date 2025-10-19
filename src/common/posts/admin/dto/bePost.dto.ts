@@ -52,4 +52,12 @@ export class BePostDto {
    })
    @IsOptional()
    image: string;
+
+   @ApiProperty({
+      type: Boolean,
+      description: 'featured',
+      required: true,
+   })
+   @IsOptional()
+   featured: boolean;
 }
