@@ -105,7 +105,7 @@ export class TransformerPostService {
          author: doc.author,
          featured: doc.featured,
          image: doc.image ? (typeof doc.thumb === 'function' ? doc.thumb('image') : doc.image) : '',
-         createdAt: moment(doc.createdAt).format(DateTime.CREATED_AT),
+         createdAt: moment(doc.createdAt).format('DD-MM-YYYY'),
          ...appendData,
       };
    }
@@ -126,7 +126,7 @@ export class TransformerPostService {
                         readTime: doc.readTime,
                         author: doc.author,
                         image: doc.image,
-                        createdAt: moment(doc.createdAt).format(DateTime.CREATED_AT),
+                        createdAt: moment(doc.createdAt).format('DD-MM-YYYY'),
                      };
                   })
                   : [{}],
