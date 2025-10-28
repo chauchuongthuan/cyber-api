@@ -30,6 +30,13 @@ export class BeCustomerDto {
       required: false,
    })
    password: string;
+
+   @IsOptional()
+   @ApiProperty({
+      description: 'roleType',
+      required: false,
+   })
+   roleType: string;
 }
 
 export class ChangeStatusDto {

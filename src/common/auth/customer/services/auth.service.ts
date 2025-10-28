@@ -241,6 +241,7 @@ export class CustomerAuthService {
       }
       if (data.newPassword && data.oldPassword) {
          const comparedPassword = await this.helperService.compareHash(data.oldPassword, customer.password);
+         console.log("comparedPassword", comparedPassword);
          if (!comparedPassword) this.helperService.throwException('Old password wrong', 406);
          let newPass = await this.helperService.hash(data.newPassword);
          dataUpdate = {

@@ -79,11 +79,37 @@ export class CustomerService {
 
    async create(data: object, files: Record<any, any>): Promise<{ status: boolean; message?: string; data?: any }> {
       try {
+         const roleType = data['roleType'];
+
+         let clickTime = 0;
+         let roleAssignedAt = null;
+         let lastReset = null;
+         if (roleType) {
+            switch (roleType) {
+               case 'silver':
+                  clickTime = 7;
+                  roleAssignedAt = new Date();
+                  lastReset = new Date();
+                  break;
+               case 'gold':
+                  clickTime = 10;
+                  roleAssignedAt = new Date();
+                  lastReset = new Date();
+                  break;
+               case 'platinum':
+                  clickTime = 15;
+                  roleAssignedAt = new Date();
+                  lastReset = new Date();
+                  break;
+               default:
+                  break;
+            }
+         }
          // data['nameNon'] = this.helperService.nonAccentVietnamese(data['name']);
          // data['consultantsNon'] = this.helperService.nonAccentVietnamese(data['consultants']);
          data['password'] = await this.helperService.hash(data['password']);
          // await convertContentFileDto(data, files, ['profileImage']);
-         const item = await new this.customer(data).save();
+         const item = await new this.customer({...data, clickTime, roleAssignedAt, lastReset}).save();
          // if (item) await saveThumbOrPhotos(item);
          return { status: true, data: item };
       } catch (error) {
@@ -99,13 +125,37 @@ export class CustomerService {
 
    async update(id: string, data: object, files: Record<any, any>): Promise<{ status: boolean; message?: string; data?: any }> {
       try {
-         // data['nameNon'] = this.helperService.nonAccentVietnamese(data['name']);
-         // data['consultantsNon'] = this.helperService.nonAccentVietnamese(data['consultants']);
+         const roleType = data['roleType'];
+
+         let clickTime = 0;
+         let roleAssignedAt = null;
+         let lastReset = null;
+         if (roleType) {
+            switch (roleType) {
+               case 'silver':
+                  clickTime = 7;
+                  roleAssignedAt = new Date();
+                  lastReset = new Date();
+                  break;
+               case 'gold':
+                  clickTime = 10;
+                  roleAssignedAt = new Date();
+                  lastReset = new Date();
+                  break;
+               case 'platinum':
+                  clickTime = 15;
+                  roleAssignedAt = new Date();
+                  lastReset = new Date();
+                  break;
+               default:
+                  break;
+            }
+         }
          if (data['password']) {
             data['password'] = await this.helperService.hash(data['password']);
          } else delete data['password'];
          // await convertContentFileDto(data, files, ['profileImage']);
-         const item = await this.customer.findByIdAndUpdate(id, data, { returnOriginal: false });
+         const item = await this.customer.findByIdAndUpdate(id, {...data, clickTime, roleAssignedAt, lastReset}, { returnOriginal: false });
          // if (item) await saveThumbOrPhotos(item);
          return { status: true, data: item };
       } catch (error) {

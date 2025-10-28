@@ -15,6 +15,10 @@ export class CustomerUpdateProfile {
    @ApiProperty()
    telegramUserId: string;
 
+   @IsOptional()
+   @ApiProperty()
+   roleType: string;
+
    @ApiProperty({
       description: 'oldPassword',
       maxLength: 255,

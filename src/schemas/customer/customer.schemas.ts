@@ -57,27 +57,28 @@ export class Customer extends Document implements TimestampInterface {
    })
    active: boolean;
 
-   // @Prop({
-   //    type: Number,
-   //    default: AuthTypeEnum.APP,
-   //    index: true,
-   // })
-   // authType: number;
+   @Prop({
+      required: false,
+      enum: ['normal', 'silver', 'gold', 'platinum'],
+      default: 'normal'
+   })
+   roleType: string;
 
-   // @Prop({
-   //    type: SchemaTypes.Mixed,
-   //    google: {
-   //       id: { type: String, default: null },
-   //       name: { type: String, default: null },
-   //       email: { type: String, default: null },
-   //    },
-   //    facebook: {
-   //       id: { type: String, default: null },
-   //       name: { type: String, default: null },
-   //       email: { type: String, default: null },
-   //    },
-   // })
-   // social: object;
+   @Prop({
+      required: false,
+      default: 0,
+   })
+   clickTime: number;
+
+   @Prop({
+      default: null,
+   })
+   roleAssignedAt: Date;
+
+   @Prop({
+      default: null,
+   })
+   lastReset: Date;
 
    @Prop({
       default: null,
