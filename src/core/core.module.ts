@@ -97,6 +97,7 @@ export class CoresModule implements NestModule {
             { path: 'auth/customers/profile-image', method: RequestMethod.ALL },
             { path: 'auth/customers/change-password', method: RequestMethod.ALL },
             { path: 'auth/customers/update-password', method: RequestMethod.ALL },
+            { path: 'auth/customers/customer-click', method: RequestMethod.GET },
          );
       consumer
          .apply(JwtUserMiddleware)

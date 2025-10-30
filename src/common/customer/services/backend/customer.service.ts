@@ -5,6 +5,7 @@ import { isIn, isNotEmpty } from 'class-validator';
 import { PaginateModel } from 'mongoose';
 import { HelperService } from '@core/services/helper.service';
 import { Customer } from '@schemas/customer/customer.schemas';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import { convertContentFileDto, saveThumbOrPhotos } from '@core/helpers/content';
 const moment = require('moment');
 @Injectable()
@@ -96,7 +97,7 @@ export class CustomerService {
                   roleAssignedAt = new Date();
                   lastReset = new Date();
                   break;
-               case 'platinum':
+               case 'diamond':
                   clickTime = 15;
                   roleAssignedAt = new Date();
                   lastReset = new Date();
@@ -109,7 +110,7 @@ export class CustomerService {
          // data['consultantsNon'] = this.helperService.nonAccentVietnamese(data['consultants']);
          data['password'] = await this.helperService.hash(data['password']);
          // await convertContentFileDto(data, files, ['profileImage']);
-         const item = await new this.customer({...data, clickTime, roleAssignedAt, lastReset}).save();
+         const item = await new this.customer({ ...data, clickTime, roleAssignedAt, lastReset }).save();
          // if (item) await saveThumbOrPhotos(item);
          return { status: true, data: item };
       } catch (error) {
@@ -142,7 +143,7 @@ export class CustomerService {
                   roleAssignedAt = new Date();
                   lastReset = new Date();
                   break;
-               case 'platinum':
+               case 'diamond':
                   clickTime = 15;
                   roleAssignedAt = new Date();
                   lastReset = new Date();
@@ -155,7 +156,11 @@ export class CustomerService {
             data['password'] = await this.helperService.hash(data['password']);
          } else delete data['password'];
          // await convertContentFileDto(data, files, ['profileImage']);
-         const item = await this.customer.findByIdAndUpdate(id, {...data, clickTime, roleAssignedAt, lastReset}, { returnOriginal: false });
+         const item = await this.customer.findByIdAndUpdate(
+            id,
+            { ...data, clickTime, roleAssignedAt, lastReset },
+            { returnOriginal: false },
+         );
          // if (item) await saveThumbOrPhotos(item);
          return { status: true, data: item };
       } catch (error) {
@@ -180,5 +185,64 @@ export class CustomerService {
    async changeStatus(data: any) {
       const item = await this.customer.findByIdAndUpdate(data.id, { active: data.active }, { returnOriginal: false });
       return item;
+   }
+
+   /**
+    * 🕛 Cron 1: Reset clickTime mỗi ngày cho tất cả user theo role
+    * Chạy mỗi ngày lúc 0h (giờ Việt Nam)
+    */
+   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+   async resetDailyClickTime() {
+      console.log('🌀 Bắt đầu reset clickTime hàng ngày...');
+
+      const roles = ['silver', 'gold', 'diamond'];
+
+      for (const role of roles) {
+         const { dailyClicks } = this.helperService.getRoleConfig(role);
+
+         const result = await this.customer.updateMany({ roleType: role }, { clickTime: dailyClicks, lastReset: new Date() });
+
+         console.log(`✅ Đã reset ${result.modifiedCount} khách hàng role=${role}`);
+      }
+
+      console.log('🎯 Hoàn tất reset clickTime hàng ngày');
+   }
+
+   /**
+    * ⏰ Cron 2: Kiểm tra role hết hạn -> xóa role
+    * Chạy mỗi ngày lúc 1h sáng
+    */
+   @Cron('0 1 * * *', { timeZone: 'Asia/Ho_Chi_Minh' })
+   async removeExpiredRoles() {
+      console.log('🧹 Bắt đầu kiểm tra và xóa role hết hạn...');
+
+      const roles = ['silver', 'gold', 'diamond'];
+      const now = new Date();
+
+      for (const role of roles) {
+         const { durationDays } = this.helperService.getRoleConfig(role);
+
+         const expireDate = new Date(now);
+         expireDate.setDate(expireDate.getDate() - durationDays);
+         console.log('expireDate', expireDate);
+
+         const result = await this.customer.updateMany(
+            {
+               roleType: role,
+               roleAssignedAt: { $lt: expireDate },
+            },
+            {
+               $set: {
+                  roleType: 'normal',
+                  clickTime: 0,
+                  roleAssignedAt: null,
+                  lastReset: null,
+               },
+            },
+         );
+         console.log(`🧾 Đã gỡ ${result.modifiedCount} role '${role}' hết hạn.`);
+      }
+
+      console.log('✅ Hoàn tất kiểm tra role hết hạn.');
    }
 }

@@ -231,30 +231,32 @@ export class CustomerAuthService {
    }
 
    async getProfile(customerID: string) {
-      console.log("customerID", customerID);
       return this.customerService.detail(customerID);
    }
 
    async updateProfile(customer: Customer, data: CustomerUpdateProfile) {
       let dataUpdate: any = {
-         ...data
-      }
+         ...data,
+      };
       if (data.newPassword && data.oldPassword) {
          const comparedPassword = await this.helperService.compareHash(data.oldPassword, customer.password);
-         console.log("comparedPassword", comparedPassword);
          if (!comparedPassword) this.helperService.throwException('Old password wrong', 406);
          let newPass = await this.helperService.hash(data.newPassword);
          dataUpdate = {
             ...dataUpdate,
-            password: newPass
-         }
+            password: newPass,
+         };
       } else {
-         delete dataUpdate.newPassword
-         delete dataUpdate.oldPassword
+         delete dataUpdate.newPassword;
+         delete dataUpdate.oldPassword;
       }
-      return this.customerService.update(customer._id, {
-         ...dataUpdate
-      }, null);
+      return this.customerService.update(
+         customer._id,
+         {
+            ...dataUpdate,
+         },
+         null,
+      );
    }
 
    async updateProfileImage(id: string, data: CustomerUpdateImage, files: any) {
@@ -335,6 +337,24 @@ export class CustomerAuthService {
          }
       }
       return false;
+   }
+
+   async handleCustomerClick(customerID: string) {
+      const customer = await this.customerService.findOneByConditions({ _id: customerID });
+      if (!customer) return false;
+
+      const now = new Date();
+      if (!this.helperService.isSameDay(now, customer.lastReset)) {
+         const { dailyClicks } = this.helperService.getRoleConfig(customer.roleType);
+         customer.clickTime = dailyClicks;
+         customer.lastReset = now;
+      }
+      if (customer.clickTime <= 0) {
+         this.helperService.throwException('You have used all your daily clicks !', 400);
+      }
+      customer.clickTime -= 1;
+      await this.customerService.update(customer.id, customer, null);
+      return true;
    }
 
    //SEND EMAIL

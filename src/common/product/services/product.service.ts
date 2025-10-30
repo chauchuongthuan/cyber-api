@@ -159,6 +159,7 @@ export class ProductService {
                      verified: item?.verified,
                      image: item.image ? `${process.env.NODE_URL}/${process.env.PREFIX_UPLOAD}/posts/${item._id}/image/${item.image}` : '',
                      createdAt: moment(item.createdAt).format('MMMM Do YYYY'),
+                     updatedAt: moment(item.updatedAt).format('MMMM Do YYYY'),
                   };
                }),
             };

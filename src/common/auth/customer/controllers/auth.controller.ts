@@ -85,6 +85,13 @@ export class AuthController {
       return this.response.detailSuccess(this.transformer.transformCustomerDetail(item));
    }
 
+   @Get('customer-click')
+   @CustomerSecure()
+   async handleCustomerClick(@CustomerAuth() customer: Record<string, any>): Promise<CoreResponse> {
+      const item = await this.authService.handleCustomerClick(customer.id);
+      if (!item) return this.response.updatedFail();
+      return this.response.updatedSuccess(this.transformer.transformCustomerDetail(item));
+   }
    @Put('profiles')
    @CustomerSecure()
    async updateProfile(@Body() dto: CustomerUpdateProfile, @CustomerAuth() customer: Customer): Promise<CoreResponse> {

@@ -83,16 +83,16 @@ export class HelperService {
       const prefixPath = process.env.BASE_PATH ? `${process.env.BASE_PATH}/api/v1` : 'api/v1';
       const regex = new RegExp(
          `${prefixPath}\/socket-server` +
-         '|' +
-         `${prefixPath}\/game\/game-pvp` +
-         '|' +
-         `${prefixPath}\/admin` +
-         '|' +
-         `${prefixPath}\/auth\/users\/login` +
-         '|' +
-         `${prefixPath}\/auth\/users\/logout` +
-         '|' +
-         `${prefixPath}\/auth\/users\/profile`,
+            '|' +
+            `${prefixPath}\/game\/game-pvp` +
+            '|' +
+            `${prefixPath}\/admin` +
+            '|' +
+            `${prefixPath}\/auth\/users\/login` +
+            '|' +
+            `${prefixPath}\/auth\/users\/logout` +
+            '|' +
+            `${prefixPath}\/auth\/users\/profile`,
          'gm',
       );
 
@@ -306,5 +306,18 @@ export class HelperService {
       const decryptedBytes = cryptoJS.AES.decrypt(encryptedData, PRIVATE_SECRET_KEY);
       const decryptedText = decryptedBytes.toString(cryptoJS.enc.Utf8);
       return decryptedText;
+   }
+
+   isSameDay(d1, d2) {
+      return d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && d1.getDate() === d2.getDate();
+   }
+
+   getRoleConfig(roleType: string) {
+      const config = {
+         silver: { dailyClicks: 7, durationDays: 7 },
+         gold: { dailyClicks: 10, durationDays: 15 },
+         diamond: { dailyClicks: 15, durationDays: 30 },
+      };
+      return config[roleType];
    }
 }

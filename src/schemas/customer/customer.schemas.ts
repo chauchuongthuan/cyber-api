@@ -59,7 +59,7 @@ export class Customer extends Document implements TimestampInterface {
 
    @Prop({
       required: false,
-      enum: ['normal', 'silver', 'gold', 'platinum'],
+      enum: ['normal', 'silver', 'gold', 'diamond'],
       default: 'normal'
    })
    roleType: string;

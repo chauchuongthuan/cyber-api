@@ -23,7 +23,7 @@ import { ProductModule } from './common/product/product.module';
 import { PaymentModule } from './common/payment/payment.module';
 import { OrderModule } from './common/order/order.module';
 import { EmailModule } from './common/email/email.module';
-
+import { ScheduleModule } from '@nestjs/schedule';
 const queueDriver = process.env.QUEUE_DRIVER;
 
 const imports = [
@@ -48,6 +48,7 @@ const imports = [
    EmailModule,
    // CustomerCareModule,
    // tokenDrawModule,
+   ScheduleModule.forRoot(),
 ];
 
 if (queueDriver === 'redis') {
