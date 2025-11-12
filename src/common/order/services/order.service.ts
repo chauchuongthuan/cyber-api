@@ -208,7 +208,7 @@ export class OrderService {
       } else {
          return {
             status: false,
-            msg: `To use our services, deposit funds by selecting a payment method, Your funds will appear in your account within minutes`,
+            msg: `Your balance is not enough!`,
          };
       }
    }
@@ -234,7 +234,7 @@ export class OrderService {
          }
          : {
             status: false,
-            msg: 'Quantity is not enough!',
+            msg: 'Quantity of product is not enough!',
          };
    }
 
