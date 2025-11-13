@@ -17,12 +17,12 @@ export class BeCustomerDto {
    })
    email: string;
 
-   @IsOptional()
-   @ApiProperty({
-      description: 'balance',
-      required: false,
-   })
-   balance: number;
+   // @IsOptional()
+   // @ApiProperty({
+   //    description: 'balance',
+   //    required: false,
+   // })
+   // balance: number;
 
    @IsOptional()
    @ApiProperty({

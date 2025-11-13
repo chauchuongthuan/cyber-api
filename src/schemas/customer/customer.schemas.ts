@@ -42,11 +42,11 @@ export class Customer extends Document implements TimestampInterface {
    })
    telegramUserId: string;
 
-   @Prop({
-      required: true,
-      default: 0,
-   })
-   balance: number;
+   // @Prop({
+   //    required: true,
+   //    default: 0,
+   // })
+   // balance: number;
 
    @Prop({ nullable: true })
    password: string;

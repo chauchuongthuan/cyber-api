@@ -39,8 +39,8 @@ export class TransformerOrderService {
          id: doc._id,
          customer: doc.customer,
          product: await this.transformerProductService.transformProductDetail(doc.product),
-         price: doc.price,
-         quantity: doc.quantity,
+         // price: doc.price,
+         // quantity: doc.quantity,
          deletedAt: doc.deletedAt ? doc.deletedAt : null,
          createdAt: moment(doc.createdAt).format('MMMM Do YYYY'),
          updatedAt: moment(doc.updatedAt).format(DateTime.CREATED_AT),
@@ -59,13 +59,13 @@ export class TransformerOrderService {
                         id: `${doc._id}`,
                         customer: doc.customer,
                         product: doc.product?.name,
-                        price: doc.price,
-                        quantity: doc.quantity,
+                        // price: doc.price,
+                        // quantity: doc.quantity,
                         createdAt: moment(doc.createdAt).format(DateTime.CREATED_AT),
                      };
                   })
                   : [{}],
-            customHeaders: customHeaders || ['ID', 'Customer', 'Product', 'Name', 'Quantity', 'Created At'],
+            customHeaders: customHeaders || ['ID', 'Customer', 'Product', 'Created At'],
          },
       };
    }

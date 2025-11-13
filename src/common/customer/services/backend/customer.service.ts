@@ -26,10 +26,9 @@ export class CustomerService {
          });
       }
 
-      if (isNotEmpty(query.name)) {
-         const nameNon = this.helperService.removeSignVietnamese(query['name']);
-         conditions['nameNon'] = {
-            $regex: new RegExp(nameNon, 'img'),
+      if (isNotEmpty(query.username)) {
+         conditions['username'] = {
+            $regex: new RegExp(query.username, 'img'),
          };
       }
 
@@ -127,11 +126,15 @@ export class CustomerService {
    async update(id: string, data: object, files: Record<any, any>): Promise<{ status: boolean; message?: string; data?: any }> {
       try {
          const roleType = data['roleType'];
+         const currentCustomer = await this.customer.findById(id);
+         const currentRole = currentCustomer?.roleType;
+         const isRoleChanged = roleType && currentRole !== roleType;
 
-         let clickTime = 0;
-         let roleAssignedAt = null;
-         let lastReset = null;
-         if (roleType) {
+         let clickTime = currentCustomer?.clickTime || 0;
+         let roleAssignedAt = currentCustomer?.roleAssignedAt || null;
+         let lastReset = currentCustomer?.lastReset || null;
+         
+         if (roleType && isRoleChanged) {
             switch (roleType) {
                case 'silver':
                   clickTime = 7;
@@ -147,6 +150,11 @@ export class CustomerService {
                   clickTime = 15;
                   roleAssignedAt = new Date();
                   lastReset = new Date();
+                  break;
+               case 'normal':
+                  clickTime = 0;
+                  roleAssignedAt = null;
+                  lastReset = null;
                   break;
                default:
                   break;

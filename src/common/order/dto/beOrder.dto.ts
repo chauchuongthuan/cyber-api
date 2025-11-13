@@ -7,9 +7,9 @@ export class BeOrderDto {
    @ApiProperty()
    product: string;
 
-   @ApiProperty()
-   @IsNotEmpty({ message: 'Quantity is required!' })
-   quantity: number;
+   // @ApiProperty()
+   // @IsNotEmpty({ message: 'Quantity is required!' })
+   // quantity: number;
 
    @ApiProperty()
    @IsOptional()

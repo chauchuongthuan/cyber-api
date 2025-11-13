@@ -21,15 +21,15 @@ export class Order extends Document implements TimestampInterface {
    })
    customer: any;
 
-   @Prop({
-      required: true,
-   })
-   quantity: number;
+   // @Prop({
+   //    required: true,
+   // })
+   // quantity: number;
 
-   @Prop({
-      required: true,
-   })
-   price: number;
+   // @Prop({
+   //    required: true,
+   // })
+   // price: number;
 
    @Prop({
       default: null,

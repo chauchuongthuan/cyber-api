@@ -72,15 +72,15 @@ export class Product extends Document implements TimestampInterface {
    })
    slug: string;
 
-   @Prop({
-      required: true,
-   })
-   price: number;
+   // @Prop({
+   //    required: true,
+   // })
+   // price: number;
 
-   @Prop({
-      required: true,
-   })
-   quantity: number;
+   // @Prop({
+   //    required: true,
+   // })
+   // quantity: number;
 
    @Prop({
       index: true,

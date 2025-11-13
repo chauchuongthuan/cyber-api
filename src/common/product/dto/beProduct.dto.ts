@@ -25,9 +25,9 @@ export class BeProductDto {
    @ApiProperty()
    title: string;
 
-   @IsOptional()
-   @ApiProperty()
-   subname: string;
+   // @IsOptional()
+   // @ApiProperty()
+   // subname: string;
 
    @IsOptional()
    @ApiProperty()
@@ -49,17 +49,17 @@ export class BeProductDto {
    @IsOptional()
    sortOrder: number;
 
-   @ApiProperty()
-   @IsOptional()
-   quantity: number;
+   // @ApiProperty()
+   // @IsOptional()
+   // quantity: number;
 
    @IsNotEmpty({ message: 'Category is required!' })
    @ApiProperty()
    category: string;
 
-   @IsNotEmpty({ message: 'rating is required!' })
-   @ApiProperty()
-   rating: string;
+   // @IsNotEmpty({ message: 'rating is required!' })
+   // @ApiProperty()
+   // rating: string;
 
    @IsOptional()
    @ApiProperty()
@@ -73,8 +73,8 @@ export class BeProductDto {
    @ApiProperty()
    content: Array<string>;
 
-   @IsNotEmpty({ message: 'Price is required!' })
-   @ApiProperty()
-   price: string;
+   // @IsNotEmpty({ message: 'Price is required!' })
+   // @ApiProperty()
+   // price: string;
 }
 

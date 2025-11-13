@@ -166,39 +166,43 @@ export class OrderService {
    async create(data: BeOrderDto): Promise<Order | boolean> {
       let validCustomer = await this.validCustomer(data);
       if (!validCustomer.status) this.helper.throwException(validCustomer.msg);
+      console.log("validCustomer::", validCustomer);
+      // let validProduct = await this.validProduct(data);
+      // if (!validProduct.status) this.helper.throwException(validProduct.msg);
 
-      let validProduct = await this.validProduct(data);
-      if (!validProduct.status) this.helper.throwException(validProduct.msg);
-
-      await this.customer.findOneAndUpdate({ _id: data.customer }, { $inc: { balance: -validProduct.data.price } });
+      // await this.customer.findOneAndUpdate({ _id: data.customer }, { $inc: { balance: -validProduct.data.price } });
 
       try {
-         const item = await new this.order({ ...data, price: validProduct?.data?.price }).save();
-         this.emailService.newOrder(
-            validCustomer?.data?.email,
-            validCustomer?.data?.username,
-            validProduct?.data?.name,
-            validProduct?.data?.category?.name,
-            validProduct?.data?.price,
-         );
+         // const item = await new this.order({ ...data, price: validProduct?.data?.price }).save();
+         const item = await new this.order({ ...data }).save();
+         console.log("item::", item);
+         // this.emailService.newOrder(
+         //    validCustomer?.data?.email,
+         //    validCustomer?.data?.username,
+         //    validProduct?.data?.name,
+         //    validProduct?.data?.category?.name,
+         //    validProduct?.data?.price,
+         // );
          return item;
       } catch (error) {
-         await this.processAfterError(data);
+         console.log("error::", error);
+         // await this.processAfterError(data);
          return false;
       }
    }
-   async processAfterError(data: BeOrderDto) {
-      let product = await this.product.findOneAndUpdate({ _id: data.product }, { $inc: { quantity: data.quantity } });
-      await this.customer.findOneAndUpdate(
-         { _id: data.customer },
-         {
-            $inc: { balance: product.price },
-         },
-      );
-   }
+   // async processAfterError(data: BeOrderDto) {
+   //    let product = await this.product.findOneAndUpdate({ _id: data.product }, { $inc: { quantity: data.quantity } });
+   //    await this.customer.findOneAndUpdate(
+   //       { _id: data.customer },
+   //       {
+   //          $inc: { balance: product.price },
+   //       },
+   //    );
+   // }
    async validCustomer(data: BeOrderDto) {
-      let product = await this.product.findById(data.product);
-      let customer = await this.customer.findOne({ _id: data.customer, balance: { $gte: product.price } });
+      // let product = await this.product.findById(data.product);
+      // let customer = await this.customer.findOne({ _id: data.customer, balance: { $gte: product.price } });
+      let customer = await this.customer.findOne({ _id: data.customer });
       if (customer) {
          return {
             status: true,
@@ -208,35 +212,35 @@ export class OrderService {
       } else {
          return {
             status: false,
-            msg: `Your balance is not enough!`,
+            msg: `Customer not found!`,
          };
       }
    }
-   async validProduct(data: BeOrderDto) {
-      let product = await this.product
-         .findOneAndUpdate(
-            {
-               _id: data.product,
-               quantity: { $gte: data.quantity },
-            },
-            {
-               $inc: {
-                  quantity: -data.quantity,
-               },
-            },
-         )
-         .populate('category');
-      return product
-         ? {
-            status: true,
-            msg: 'OK',
-            data: product,
-         }
-         : {
-            status: false,
-            msg: 'Quantity of product is not enough!',
-         };
-   }
+   // async validProduct(data: BeOrderDto) {
+   //    let product = await this.product
+   //       .findOneAndUpdate(
+   //          {
+   //             _id: data.product,
+   //             quantity: { $gte: data.quantity },
+   //          },
+   //          {
+   //             $inc: {
+   //                quantity: -data.quantity,
+   //             },
+   //          },
+   //       )
+   //       .populate('category');
+   //    return product
+   //       ? {
+   //          status: true,
+   //          msg: 'OK',
+   //          data: product,
+   //       }
+   //       : {
+   //          status: false,
+   //          msg: 'Quantity of product is not enough!',
+   //       };
+   // }
 
    async update(id: string, data: BeOrderDto): Promise<Order> {
       const item = await this.order.findByIdAndUpdate(id, data, { returnOriginal: false });
