@@ -140,6 +140,11 @@ export class ProductService {
                      deletedAt: null,
                   },
                },
+               {
+                  $sample: {
+                     size: 10,
+                  },
+               },
             ]);
             return {
                category: {
