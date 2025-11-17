@@ -56,7 +56,7 @@ export class TransformerProductService {
          verified: doc.verified,
          deletedAt: doc.deletedAt ? doc.deletedAt : null,
          createdAt: moment(doc.createdAt).format('MMMM Do YYYY'),
-         updatedAt: moment(doc.updatedAt).format(DateTime.CREATED_AT),
+         updatedAt: moment(doc.updatedAt).format('MMMM Do YYYY'),
          ...appendData,
       };
    }
